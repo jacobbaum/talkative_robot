@@ -1,63 +1,131 @@
-				# puts "Please enter your name:"
-				# name = gets.chomp
-name = "Jacob"
+require 'pry'
+				
+def get_users_name
+	print "Please enter your name:"
+	gets.chomp
+end	
 
-				# puts "Please enter your gender (M/F):"
-				# gender = gets.chomp
-gender = "F"
-
-puts name == "Ernest" ? "I knew it was you!" : "Sorry you're not Ernest."
-
-				# puts "Please enter your age:"
-				# age = gets.chomp.to_i
-age = 90
-
-puts "Hi #{name}, who is #{age} years old!"
-
-puts "That's a nice, even age." if age % 2 == 0 
-puts "#{age}, that's odd." unless age % 2 == 0
-
-if age < 80
-	puts "You are not yet in the zone."
-elsif age > 82
-	puts "How was the zone? I've heard good things."	
-else
-	puts "You are in the zone."
+def get_users_age
+	print "Please enter your age:"
+	gets.chomp.to_i
 end
 
-puts "Do you mind if I call you #{name.slice(0)}?"
-
-puts "How about #{name[0]}?"
-
-
-case age
-when 0..73 
-	puts "You will be 75 years old in #{75 - age} years."
-when 74
-	puts "You will be 75 in mere months!"
-when 75..999
-	puts "You will be 75 in #{75 - age} years if time starts moving backward."
+def get_users_gender
+	print "Please enter your gender [M/F]:"
+	gets.chomp.upcase
 end
 
-name.upcase!
-
-puts "Hey #{name}, Where are you going!?"
-
-puts "Hey \"Dude\", what's up?"
-
-if age > 60 && gender == "M" || gender == "F"
-puts "Is it innapropriate to call you dude?"
+def get_users_welfare
+	print "In one word, how are you today?"
+	gets.chomp
 end
 
+def determine_users_color (age, gender)
+	if age >= 50 && gender == "M"
+	"magenta"
+	elsif age < 50 && gender == "M"
+	"beige"
+	elsif age >= 50 && gender == "F"
+	"ruby on rails red"
+	else 
+	"taupe"
+	end
+end
 
-if age >= 50 && gender == "M"
-	color = "magenta"
-elsif age < 50 && gender == "M"
-	color = "beige"
-elsif age >= 50 && gender == "F"
-	color = "ruby on rails red"
+def determine_users_zone_position(age)
+	the_zone = 81
+	if age < the_zone
+	"Pre-Zone"
+	elsif age > the_zone
+	"Post-Zone"	
+	else
+	"In the Zone"
+	end
+end
+
+user = {}
+
+user[:name] = get_users_name
+puts user[:name] == "Ernest" ? "I knew it was you!" : "Sorry you're not named Ernest."
+
+user[:age] = get_users_age
+puts "Hi #{user[:name]}, who is #{user[:age]} years old!"
+puts user[:age] % 2 == 0 ? "That's a nice, even age." : "That's an odd age." 
+
+user[:gender] = get_users_gender
+# I didn't end up doing anything with 'welfare'
+user[:welfare] = get_users_welfare
+
+user[:color] = determine_users_color(user[:age], user[:gender])
+# Didn't end up doing anything with 'zone_position' either.  It's in the the 
+# user hash, though
+user[:zone_position] = determine_users_zone_position(user[:age]) 
+
+# Might use these and others to make array of acceptable nicknames
+puts "Do you mind if I call you #{user[:name].slice(0)}?"
+puts "How about #{user[:name].chars.first}?"
+puts "Maybe #{user[:name].slice(0, 3)}-#{user[:name].slice(0, 3)}?"
+puts "#{user[:name]}-arino?"
+
+grocery_list = ["coffee", "some kind of vegetable", "beer", "milk", "apples"]
+# Wanted to try moving items from one array to another, so
+forgotten_groceries = ["cereal", "bananas", "40 pounds of dog food"]
+
+puts "#{user[:name]}, we are shopping for groceries.  Currently. Right now. Surprise!"
+
+random_grocery = grocery_list.sample
+
+# This needs to be cleaned up. Another time. Maybe write a method 'item_grabbed' 
+# that returns true or false?
+print "Did you grab #{random_grocery}? [Y/N]"
+gets.chomp.upcase == "Y" ? item_grabbed = true : item_grabbed = false
+
+if item_grabbed
+	grocery_list.delete(random_grocery)
+	puts "Thanks! You're the best!"
 else 
-	color = "taupe"
+	puts "That's okay, but I'm beginning to question your status as 'the best'."
 end
 
-puts "Your gender and age correspond to the color #{color}."
+remembered_grocery = forgotten_groceries.shift
+puts "Oh, I just remembered, we need #{remembered_grocery}!"
+grocery_list << remembered_grocery
+
+puts "All together, we still need:"
+#I got ahead of myself, here, but '.each' with a block looked like an easy way 
+#to style and print the list
+grocery_list.each { |grocery| puts "- #{grocery.upcase}!! - "}
+
+puts "Now, I will reveal your color:"
+puts " --- #{user[:color].upcase} --- "
+
+
+
+
+
+
+# Some nonworking code from the method lab. I was expecting this to return a 
+# variable called 'welfare'.  It didn't. What went wrong?
+
+# def get_users_welfare
+# 	puts "In one word, how are you today?"
+# 	welfare = gets.chomp
+# 	return welfare
+# end
+
+# get_users_welfare
+# puts "#{name}, you are #{welfare.downcase}."
+
+# I want to go back to this case statement, but I also want to go home tonight
+# def years_until_seventy_five(current_age)
+# 	case current_age
+# 	when 0..73 
+# 		puts "You will be 75 years old in #{75 - current_age} years."
+# 	when 74
+# 		puts "You will be 75 in mere months!"
+# 	when 75..999
+# 		puts "You will be 75 in #{(75 - current_age).abs} years if time starts moving backward."
+# 	end
+# end
+
+# years_until_seventy_five(age)
