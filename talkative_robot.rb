@@ -1,24 +1,24 @@
 require 'pry'
 
 class Person
-	attr_reader :name, :age, :gender, :welfare, :nicknames, :color
+	attr_reader :name, :age, :gender, :welfare, :nicknames, :color # only needed up here
 
-	def initialize (args)
-		@name = args[:name]
-		@age = args[:age]
-		@gender = args[:gender] 
-		@welfare = args[:welfare]
-		@nicknames = args[:nicknames]
-		@color = args[:color]
+	def initialize(args)
+		@name 			= args[:name]   # can use || for or
+		@age 				= args[:age]
+		@gender 		= args[:gender]
+		@welfare 		= args[:welfare]
+		@nicknames 	= args[:nicknames]
+		@color 			= args[:color] 
 	end	
 
-	def is_male?
-		@gender == "M"
+	def male?
+		@gender == "M" #don't need the @ with 
 	end	
 
 	def determine_color
-		if is_male?
-			@age >= 50 ? @color = "magenta" : @color = "beige"
+		if male?
+			@age >= 50 ? @color = "magenta" : @color = "beige"   #don't need to @ here if 'getter' is set
 		else
 			@age >= 50 ? @color = "ruby red" : @color = "taupe"
 		end
@@ -29,7 +29,7 @@ end
 class Author < Person
 	
 	def initialize(args)
-		super
+		super(args)
 	end
 
 	def about
@@ -42,7 +42,7 @@ end
 class User < Person
 	
 	def initialize(args)
-		super
+		super(args)
 	end
 
 	def get_name
@@ -88,7 +88,6 @@ class User < Person
 		if gets.chomp.chars.first.upcase == "N"
 			@nicknames.push "#{@name.slice(0, 3)}-#{@name.slice(0, 3)}" 
 		end
-		@nicknames #?
 	end
 
 	def is_user_ernest
@@ -105,7 +104,7 @@ class User < Person
 
 	def about
 		puts  "Your name is #{@name}. You are #{@age} years old. Your gender is #{@gender}."
-		puts  "Today, you are #{@welfare}."
+		print  "Today, you are #{@welfare}."
 		print " Possible nicknames for you are #{@nicknames.join(", ")}." if @nicknames.any?
 		print " Your color is #{@color}." if @color.nil? == false
 	end
@@ -127,7 +126,7 @@ class GroceryList
 		@list.sample
 	end
 
-	def item_grabbed?(item) #check again
+	def item_grabbed?(item) 
 		print "Did you grab #{item}? [Y/N] "
 		gets.chomp.upcase == "Y"
 	end	
@@ -156,8 +155,11 @@ end
 author  = Author.new(name: "Jacob", age: "33", gender: "M", welfare: "good", 
 				 	nicknames: [ "J", "Jac Jac" ], color: "beige")
 
-user 		= User.new(name: nil, age: nil, gender: nil, welfare: nil, 
-					nicknames: nil, color: nil) # all necessary? Seems like there should be a better way.
+user 		= User.new({}) #(name: nil, age: nil, gender: nil, welfare: nil, 
+					# nicknames: nil, color: nil) # all necessary? Seems like there should be a better way.
+
+# Could have made Class variables instead eg, User.get_name
+# method would have looked like: def self.get_name \n print "Name: " \n gets.chomp
 
 user.get_name
 user.user_greeting
@@ -178,7 +180,7 @@ author.about if gets.chomp.chars.first.upcase == "Y"
 print "Want to see what I know about you? [Y/N] "
 user.about if gets.chomp.chars.first.upcase == "Y"
 
-puts user.nicknames.empty? ? "#{user.name}" : "#{user.nicknames.sample}"
+print user.nicknames.empty? ? "\n#{user.name}" : "\n#{user.nicknames.sample}"
 print ", it's time for an outing. Press enter when you're ready. "
 gets.chomp
 
@@ -227,3 +229,5 @@ gets.chomp
 
 grocery_list.owner = current_user
 puts "The list's new owner is #{grocery_list.owner.name}."
+
+binding.pry
