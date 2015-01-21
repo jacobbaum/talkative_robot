@@ -227,6 +227,3 @@ gets.chomp
 
 grocery_list.owner = current_user
 puts "The list's new owner is #{grocery_list.owner.name}."
-
-
-
