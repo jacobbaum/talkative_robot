@@ -1,183 +1,232 @@
 require 'pry'
-require 'csv'
-				
-def get_user_name
-	print "Please enter your name: "
-	gets.chomp
-end	
 
-def get_user_age
-	print "Please enter your age: "
-	gets.chomp.to_i
-end
+class Person
+	attr_reader :name, :age, :gender, :welfare, :nicknames, :color
 
-def get_user_gender
-	print "Please enter your gender [M/F]: "
-	gets.chomp.chars.first.upcase
-end
-
-def is_male?(user)
-	user[:gender] == "M"
-end	
-
-def get_user_welfare
-	welfares = [ "okay", "good", "outstanding" ]
-	puts "How are you today? (Please pick one by entering its number.)"
-	print "1. #{welfares[0]} 2. #{welfares[1]} 3. #{welfares[2]} "
-	welfares[gets.chomp.to_i - 1]
-end	
-
-def determine_nicknames(user)
-	nicknames = []
-	print "Do you mind if I call you #{user[:name].slice(0)}? [Y/N] "
-	if gets.chomp.chars.first.upcase == "N"
-		nicknames.push "#{user[:name].slice(0)}" 
-	end
-	print "How about #{user[:name].slice(0, 2)}#{user[:name].chars.first.downcase}? [Y/N] "
-	if gets.chomp.chars.first.upcase == "N"
-		nicknames.push "#{user[:name].slice(0, 2)}#{user[:name].chars.first.downcase}" 
-	end
-	print "Maybe #{user[:name].slice(0, 3)}-#{user[:name].slice(0, 3)}? [Y/N] "
-	if gets.chomp.chars.first.upcase == "N"
-		nicknames.push "#{user[:name].slice(0, 3)}-#{user[:name].slice(0, 3)}" 
-	end
-	nicknames
-end
-
-def determine_color(user)
-	if is_male?(user)
-		user[:age] >= 50 ? user[:color] = "magenta" : user[:color] = "beige"
-	else
-		user[:age] >= 50 ? user[:color] = "ruby red" : user[:color] = "taupe"
-	end
-end			
-
-def is_user_ernest(user)
-	puts user[:name] == "Ernest" ? "I knew it was you!" : "Sorry you're not named Ernest."
-end	
-
-def about_a_person(person)
-	if person[:role] == "author"
-		to_be = "I am"
-		possesive = "my"
-		pronoun = "me" 
-	else 
-		to_be = "you are"
-		possesive = "your"
-		pronoun = "you"
+	def initialize (args)
+		@name = args[:name]
+		@age = args[:age]
+		@gender = args[:gender] 
+		@welfare = args[:welfare]
+		@nicknames = args[:nicknames]
+		@color = args[:color]
 	end	
-	person.each do |k,v| 
-		case k
-		when :welfare
-			puts "Today, #{to_be} #{v}."
-		when :nicknames
-			if person[:nicknames].any? 
-				puts "Possible nicknames for #{pronoun} are #{person[:nicknames]
-				.slice(0, person[:nicknames].count-1).join(", ")} and #{person[:nicknames].last}."
-			end	
-		else		
-			puts "#{possesive.capitalize} #{k} is #{v}."
+
+	def is_male?
+		@gender == "M"
+	end	
+
+	def determine_color
+		if is_male?
+			@age >= 50 ? @color = "magenta" : @color = "beige"
+		else
+			@age >= 50 ? @color = "ruby red" : @color = "taupe"
 		end
 	end	
-	person
+
 end
 
-def user_greeting(user)
-	puts "Hi #{user[:name]}!"
-end
+class Author < Person
+	
+	def initialize(args)
+		super
+	end
 
-def critique_user_age(user)
-	puts user[:age] % 2 == 0 ? "That's a nice, even age." : "That's an odd age." 
-end
+	def about
+		puts "My name is #{@name}. I am #{@age} years old. My gender is #{@gender}."
+		puts "Today, I am #{@welfare}. Possible nicknames for me:"
+		puts "#{@nicknames.join(", ")}. My color is #{@color}."
+	end
+end	
+				
+class User < Person
+	
+	def initialize(args)
+		super
+	end
 
-def display_list(list)
-	list.each { |item| puts "#{sprintf "%02d", (list.index(item) + 1)} -- #{item.capitalize}" }
-end
+	def get_name
+		print "Please enter your name: "
+		@name = gets.chomp
+	end	
 
-def was_grocery_grabbed(grocery_list)
-	random_grocery = grocery_list.sample
-	print "Did you grab #{random_grocery}? [Y/N] "
-	if gets.chomp.upcase == "Y"
-		grocery_list.delete(random_grocery)
-		puts "Thanks! You're the best!"
-	else
-		puts "That's okay, but I'm beginning to question your status as 'the best'."
+	def get_age
+		print "Please enter your age: "
+		@age = gets.chomp.to_i
+	end
+
+	def get_gender
+		print "Please enter your gender [M/F]: "
+		case gets.chomp.chars.first.upcase
+		when "M"
+			@gender = "M"
+		when "F"
+			@gender = "F"
+		else
+			@gender = "Other"
+		end			
+	end
+
+	def get_welfare
+		welfares = [ "okay", "good", "outstanding" ]
+		puts "How are you today? (Please pick one by entering its number.)"
+		print "1. #{welfares[0]} 2. #{welfares[1]} 3. #{welfares[2]} "
+		@welfare = welfares[gets.chomp.to_i - 1]
+	end	
+
+	def determine_nicknames
+		@nicknames = []
+		print "Do you mind if I call you #{@name.slice(0)}? [Y/N] "
+		if gets.chomp.chars.first.upcase == "N"
+			@nicknames.push "#{@name.slice(0)}" 
+		end
+		print "How about #{@name.slice(0, 2)}#{@name.chars.first.downcase}? [Y/N] "
+		if gets.chomp.chars.first.upcase == "N"
+			@nicknames.push "#{@name.slice(0, 2)}#{@name.chars.first.downcase}" 
+		end
+		print "Maybe #{@name.slice(0, 3)}-#{@name.slice(0, 3)}? [Y/N] "
+		if gets.chomp.chars.first.upcase == "N"
+			@nicknames.push "#{@name.slice(0, 3)}-#{@name.slice(0, 3)}" 
+		end
+		@nicknames #?
+	end
+
+	def is_user_ernest
+		puts @name == "Ernest" ? "I knew it was you!" : "Sorry you're not named Ernest."
+	end	
+
+	def user_greeting
+		puts "Hi #{@name}!"
+	end
+
+	def critique_user_age
+		puts @age % 2 == 0 ? "That's a nice, even age." : "That's an odd age." 
+	end
+
+	def about
+		puts  "Your name is #{@name}. You are #{@age} years old. Your gender is #{@gender}."
+		puts  "Today, you are #{@welfare}."
+		print " Possible nicknames for you are #{@nicknames.join(", ")}." if @nicknames.any?
+		print " Your color is #{@color}." if @color.nil? == false
 	end
 end
 
-author = { role: "author", name: "Jacob", age: "33", gender: "M", welfare: "good", 
-	nicknames: [ "J", "Jac Jac" ], color: "beige" }
-user = { role: "user" }
+class GroceryList
+	attr_accessor :list, :owner
 
+	def initialize(path_to_file, owner)
+		@list = IO.read(path_to_file).split("\n")
+		@owner = owner
+	end
 
-# -- Getting to know each other --
+	def display
+		@list.each { |item| puts "#{sprintf "%02d", (@list.index(item) + 1)} -- #{item.capitalize}" }
+	end
+		
+	def random_item	
+		@list.sample
+	end
 
-tr_ary = "TALKATIVE!ROBOT".chars
-fancy_intro = []
-tr_ary.each.with_index { |char, i| fancy_intro.push("! " + "#{char} "*(i+1) + "! "*(14-i) + "!") }
-fancy_intro.each { |line| print "#{line} #{line.reverse}\n" }
+	def item_grabbed?(item) #check again
+		print "Did you grab #{item}? [Y/N] "
+		gets.chomp.upcase == "Y"
+	end	
 
-user[:name] 			= get_user_name
+	def delete_item(item)
+		@list.delete(item)
+	end	
 
-user_greeting(user)
-is_user_ernest(user)
+	def delete_item_if_grabbed(item)
+		delete_item(item) if item_grabbed?(item)
+	end
 
-user[:age] 				= get_user_age
+	def remember_item(item)
+		puts "I just remembered that we need #{item}! I'm adding it to the list."
+		@list << item
+	end	
+	
+	def save_as(path_to_file)
+		IO.write(path_to_file, @list.join("\n"))
+	end
 
-critique_user_age(user)
+end
 
-user[:gender] 		= get_user_gender
+# -- Getting to know the user --
 
-user[:welfare] 		= get_user_welfare
+author  = Author.new(name: "Jacob", age: "33", gender: "M", welfare: "good", 
+				 	nicknames: [ "J", "Jac Jac" ], color: "beige")
 
-user[:nicknames] 	= determine_nicknames(user)
+user 		= User.new(name: nil, age: nil, gender: nil, welfare: nil, 
+					nicknames: nil, color: nil) # all necessary? Seems like there should be a better way.
 
-# if user[:nicknames].empty?
-# 	puts "Thanks {#name}. Want to learn more about me? [Y/N]"
-# else 
-# 	puts "Thanks #{user[:nicknames].sample}! Want to learn more about me? [Y/N]"
-# end
+user.get_name
+user.user_greeting
+user.is_user_ernest
 
-print user[:nicknames].empty? ? "Thanks #{user[:name]}. " : "Thanks #{user[:nicknames].sample}! "
+user.get_age
+user.critique_user_age
+
+user.get_gender
+
+user.get_welfare
+
+user.determine_nicknames
+
+print user.nicknames.empty? ? "Thanks #{user.name}. " : "Thanks #{user.nicknames.sample}! "
 print "Want to learn more about me? [Y/N] "
-about_a_person(author) if gets.chomp.chars.first.upcase == "Y"
+author.about if gets.chomp.chars.first.upcase == "Y"
 print "Want to see what I know about you? [Y/N] "
-about_a_person(user) if gets.chomp.chars.first.upcase == "Y"
+user.about if gets.chomp.chars.first.upcase == "Y"
 
-print user[:nicknames].empty? ? "#{user[:name]}" : "#{user[:nicknames].sample}"
+puts user.nicknames.empty? ? "#{user.name}" : "#{user.nicknames.sample}"
 print ", it's time for an outing. Press enter when you're ready. "
 gets.chomp
 
-# -- Grocery time --
+# -- Going shopping with the user --
 
 print "**!** "*4 + "Shopping for Groceries " + "**!** "*4 + "\n"
 
-binding.pry
+puts "#{user.name}, we are shopping for groceries.  Currently. Right now. Surprise!"
 
-# grocery_list = CSV.read("grocery_list.csv", { headers: true, header_converters: :symbol, converters: :numeric } )
+grocery_list = GroceryList.new("grocery_list.txt", user)
 
-grocery_list = IO.read("grocery_list.txt").split("\n")
-forgotten_groceries = ["cereal", "bananas", "40 pounds of dog food"]
+puts "I just gave you a grocery list. You are it's new owner. Here's what is on it:"
+grocery_list.display
 
-puts "#{user[:name]}, we are shopping for groceries.  Currently. Right now. Surprise!"
+grocery_list.delete_item_if_grabbed(grocery_list.random_item)
 
-puts "Here's what we need:"
-display_list(grocery_list)
+grocery_list.remember_item("cereal")
 
-was_grocery_grabbed(grocery_list)
+puts "I've had enough shopping. I'm saving the list for later."
+grocery_list.save_as("new_grocery_list.txt")
 
-remembered_grocery = forgotten_groceries.shift
-puts "Oh, I just remembered, we need #{remembered_grocery}!"
-grocery_list << remembered_grocery
-
-IO.write("new_grocery_list.txt", grocery_list.join("\n"))
-
-print "I've had enough shopping. Press enter and I will reveal your color."
+print "Press enter and I will reveal your color."
 gets.chomp
 
-user[:color] = determine_color(user)
-decoration = "*!!*!!*!!*!!*!!*!!*!!*!!*!!*!!*!!*!!*!!*!!*"
-color_dec = decoration[0, user[:color].length]
-4.times { |i| puts i.even? ? "#{color_dec} #{user[:color].upcase} "*3 : "#{user[:color].upcase} #{color_dec} "*3 }
+user.determine_color
+decoration = "*!!*!!*!!*!!*!!*!!*"
+color_dec = decoration[0, user.color.length]
+4.times do |i| 
+	if i.even?  
+		puts "#{color_dec} #{user.color.upcase} "*3  
+	else
+		puts "#{user.color.upcase} #{color_dec} "*3 
+	end	
+end
+
+print "Press enter again to see Gerry's color."
+gets.chomp
+
+current_user = User.new(name: "Gerry", age: 28, gender: "M")
+
+current_user.determine_color
+puts "-!- #{current_user.color.upcase} -!- "*5
+
+print "Press enter one more time to give Gerry the grocery list. Then, we're all done!"
+gets.chomp
+
+grocery_list.owner = current_user
+puts "The list's new owner is #{grocery_list.owner.name}."
+
 
 
