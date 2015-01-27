@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../lib/person'
 
-describe Person do
+describe Person do 
   describe "male?" do
     context "is a guy" do
       let(:person_m) { Person.new(gender: "M") }
@@ -12,3 +12,4 @@ describe Person do
     end
   end
 end
+
