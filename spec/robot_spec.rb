@@ -91,48 +91,11 @@ describe GroceryList do
   end       
 end
 
+# #Can do:
+# -apply method
+# -expect
 
-
-#Can do:
--apply method
--excape
-
-eg,
-an_item = list.random_item
-expect g_list.list.include?(an_item).to be be_truthy
-
-# describe GroceryList do
-#   subject(:list) { GroceryList.new("../grocery_list.txt", "some_guy") }
-#     it 'has a list' do
-#       expect
-#   describe '#display' do
-#     it "prints out the list but doesn't change it." do
-#       list.display
-#       expect(list.size).to eq(2)
-#     end
-#    end
-#   end  
-
-
-
-
-#   it "deletes an item after it's grabbed from the shelf" do
-#     expect
-#   it "adds an item when that item is remembered"  
-
-
-# has items 
-# has an owner
-
-
-
-
-# when an item is grabbed from the shelf, it is removed from the list.
-#  when an item is remembered, it is added to the list. 
-
-# describe Person do
-#   describe "how tall" do
-#    person.height
-#   end  
-# end
+# eg,
+# an_item = list.random_item
+# expect g_list.list.include?(an_item).to be be_truthy
   
