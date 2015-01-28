@@ -1,14 +1,6 @@
-# class Person
-#   def initialize(args)
-#     @gender = args[:gender]
-#   end
-#   def male?
-#     @gender == "M"
-#   end
-# end
-
 class Person
-  attr_reader :name, :age, :gender, :welfare, :nicknames, :color # only needed up here
+  attr_reader :name, :age, :gender, :welfare, :nicknames # only needed up here
+  attr_accessor :color
 
   def initialize(args)
     @name       = args[:name]   # can use || for or
@@ -20,14 +12,14 @@ class Person
   end 
 
   def male?
-    @gender == "M" #don't need the @ with 
+    gender == "M" #don't need the @ with 
   end 
 
   def determine_color
     if male?
-      @age >= 50 ? @color = "magenta" : @color = "beige"   #don't need to @ here if 'getter' is set
+      color = age >= 50 ?  "magenta" : "beige"   #don't need to @ here if 'getter' is set
     else
-      @age >= 50 ? @color = "ruby red" : @color = "taupe"
+      color = age >= 50 ?  "ruby red" : "taupe"
     end
   end 
 

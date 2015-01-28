@@ -33,23 +33,21 @@ class User < Person
     @welfare = welfares[gets.chomp.to_i - 1]
   end 
 
+  def generate_nickname(first_letter, length, repetitions)
+    names = name.slice(first_letter-1, length)
+    repetitions == 1 ? nick = names : nick = names << "-#{names}"*(repetitions-1)
+  end    
+      
   def determine_nicknames
     @nicknames = []
-    print "Do you mind if I call you #{@name.slice(0)}? [Y/N] "
-    if gets.chomp.chars.first.upcase == "N"
-      @nicknames.push "#{@name.slice(0)}" 
-    end
-    print "How about #{@name.slice(0, 2)}#{@name.chars.first.downcase}? [Y/N] "
-    if gets.chomp.chars.first.upcase == "N"
-      @nicknames.push "#{@name.slice(0, 2)}#{@name.chars.first.downcase}" 
-    end
-    print "Maybe #{@name.slice(0, 3)}-#{@name.slice(0, 3)}? [Y/N] "
-    if gets.chomp.chars.first.upcase == "N"
-      @nicknames.push "#{@name.slice(0, 3)}-#{@name.slice(0, 3)}" 
-    end
+    possible_nicknames = [generate_nickname(1,1,1), generate_nickname(1,2,1), generate_nickname(1,3,2)]
+    possible_nicknames.each_index do |i|
+      print "Do you mind if I call you #{possible_nicknames[i]}? [Y/N] "
+      @nicknames.push "#{possible_nicknames[i]}" if gets.chomp.chars.first.upcase == "N"   
+    end    
   end
 
-  def is_user_ernest
+  def is_user_ernest?
     puts @name == "Ernest" ? "I knew it was you!" : "Sorry you're not named Ernest."
   end 
 
@@ -67,4 +65,5 @@ class User < Person
     print " Possible nicknames for you are #{@nicknames.join(", ")}." if @nicknames.any?
     print " Your color is #{@color}." if @color.nil? == false
   end
+
 end

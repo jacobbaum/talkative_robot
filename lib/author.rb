@@ -1,5 +1,7 @@
+require_relative 'person'
+
 class Author < Person
-  
+
   def initialize(args)
     super(args)
   end

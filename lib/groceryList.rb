@@ -26,7 +26,7 @@ class GroceryList
   end 
 
   def delete_item(item)
-    @list.delete(item)
+    list.delete(item)
   end 
 
   def delete_item_if_grabbed(item)
@@ -35,11 +35,11 @@ class GroceryList
 
   def remember_item(item)
     puts "I just remembered that we need #{item}! I'm adding it to the list."
-    @list << item
+    list << item
   end 
   
   def save_as(path_to_file)
-    IO.write(path_to_file, @list.join("\n"))
+    IO.write(path_to_file, list.join("\n"))
   end
 
 end
